@@ -1,6 +1,9 @@
 import asyncHandler from "express-async-handler";
 import Post from "../models/post.model.js";
-import { getAuth, User } from "@clerk/express";
+import Comment from "../models/comment.model.js";
+import Notification from "../models/notification.model.js";
+import { getAuth } from "@clerk/express";
+import User from "../models/user.model.js";
 import cloudinary from "../config/cloudinary.js";
 
 export const getPosts = asyncHandler(async (req, res) => {
@@ -32,7 +35,7 @@ export const getPost = asyncHandler(async(req, res) => {
             }
         })
     
-    if (!post) return res.status(404).json({ erro: "Post not found" });
+    if (!post) return res.status(404).json({ error: "Post not found" });
 
     res.status(200).json({ post })
 })
@@ -114,7 +117,7 @@ export const likePost = asyncHandler( async(req, res) => {
     const user = await User.findOne({ clerkId: userId })
     const post = await Post.findById(postId);
 
-    if (!user || !Post) return res.status(404).json({ error: "User or post not found"})
+    if (!user || !post) return res.status(404).json({ error: "User or post not found"})
 
     const isLiked = post.likes.includes(user._id)
 
@@ -126,7 +129,7 @@ export const likePost = asyncHandler( async(req, res) => {
     }
     else {
         // like
-        await Post.findByIdAndDelete(postId, {
+        await Post.findByIdAndUpdate(postId, {
             $push: { likes: user._id }
         })
 
