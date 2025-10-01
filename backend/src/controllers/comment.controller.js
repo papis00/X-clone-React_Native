@@ -2,7 +2,7 @@ import { getAuth } from "@clerk/express";
 import asyncHandler from "express-async-handler";
 import Comment from "../models/comment.model.js";
 import User from "../models/user.model.js";
-import Post from "../models/post.model";
+import Post from "../models/post.model.js";
 import Notification from "../models/notification.model.js";
 
 export const getComments = asyncHandler( async(req, res) => {
@@ -26,8 +26,8 @@ export const createComment = asyncHandler( async(req, res) => {
         return res.status(400).json({ error: "Comment content is required" })
     }
 
-    const user = User.findOne({ clerkId: userId })
-    const post = Post.findOne(postId)
+    const user = await User.findOne({ clerkId: userId })
+    const post = await Post.findOne(postId)
 
     if (!user || !post ) return res.status(404).json({ error: "User or post not found "})
     
