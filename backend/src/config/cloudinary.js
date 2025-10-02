@@ -1,5 +1,8 @@
-import { V2 as cloudinary } from "cloudinary"
-import { ENV } from "./env.js"
+// import pkg from "cloudinary";
+import { v2 as cloudinary } from "cloudinary"
+import { ENV } from "./env.js";
+
+// const { v2: cloudinary } = pkg;
 
 cloudinary.config({
     cloud_name: ENV.CLOUDINARY_CLOUD_NAME,
